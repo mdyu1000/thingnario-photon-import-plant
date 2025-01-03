@@ -1,0 +1,18 @@
+# 環境相關
+venv/
+.env
+
+# Python 相關
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 日誌檔案
+*.log
+
+# 輸出檔案
+*.xlsx
+
+# 系統相關
+.DS_Store
+Thumbs.db
