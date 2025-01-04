@@ -1,5 +1,7 @@
 {
     "cSpell.words": [
-        "iterrows"
+        "dotenv",
+        "iterrows",
+        "levelname"
     ]
 }
