@@ -8,5 +8,6 @@
         "Pyranometer",
         "pyranometers",
         "sheetnames"
-    ]
+    ],
+    "editor.formatOnSave": true
 }

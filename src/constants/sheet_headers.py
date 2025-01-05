@@ -10,6 +10,7 @@ COMMON_HEADERS = [
     ("Modbus ID", "H"),
 ]
 
+
 @dataclass
 class SheetHeaders:
     LOGGER_HEADERS = [
@@ -53,4 +54,4 @@ class SheetHeaders:
         ("MPPT1 安裝容量", "J"),
         ("MPPT1 方位", "K"),
         ("MPPT1 傾角", "L"),
-    ] 
+    ]

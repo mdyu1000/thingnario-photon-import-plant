@@ -27,6 +27,7 @@ python -m venv venv
 3. 安裝相依套件：
 ```bash
 pip install -r requirements.txt
+pip install -r dev-requirements.txt
 ```
 
 ## 環境變數設定

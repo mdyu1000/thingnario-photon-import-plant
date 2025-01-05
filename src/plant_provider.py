@@ -2,11 +2,13 @@ from abc import ABC, abstractmethod
 from typing import List
 from dataclasses import dataclass
 
+
 @dataclass
 class Device:
     device_name: str
-    device_serial_number: str # 裝置序號
-    device_id: str # 裝置代碼
+    device_serial_number: str  # 裝置序號
+    device_id: str  # 裝置代碼
+
 
 @dataclass
 class Plant:
@@ -14,6 +16,7 @@ class Plant:
     pyranometers: List[Device]
     thermometers: List[Device]
     inverters: List[Device]
+
 
 class PlantProvider(ABC):
     @abstractmethod
