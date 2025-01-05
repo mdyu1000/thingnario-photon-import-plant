@@ -1,42 +1,29 @@
 import pandas as pd
 import logging
 from dotenv import load_dotenv
-import os
-from basic_info_processor import BasicInfoProcessor
+from src.basic_info_processor import BasicInfoProcessor
+from src.auo_plant_provider import AUOPlantProvider
+from src.utils.logger import setup_logger
 
 load_dotenv()
+setup_logger()
 
-# 設置日誌
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    filename='power_station_converter.log'
-)
 class PowerStationConverter:
-    def __init__(self, api_key):
-        self.basic_info_processor = BasicInfoProcessor(api_key)
+    def __init__(self, provider: str):
+        self.basic_info_processor = BasicInfoProcessor()
+        self.device_provider = self._get_device_provider(provider)
     
-    def convert_csv_to_xlsx(self, input_file: str, provider: str):
-        """
-        Convert CSV data to XLSX files with device information from specified provider
-        """
+    def convert_csv_to_xlsx(self, input_file: str):
         try:
             df = pd.read_csv(input_file)
             
-            # Select device provider based on input
-            device_provider = self._get_device_provider(provider)
-            
             for _, row in df.iterrows():
                 try:
-                    # Process basic information
                     wb = self.basic_info_processor.create_base_template()
                     self.basic_info_processor.fill_station_info(row, wb)
                     
-                    # Process device information
-                    # device_info = self._process_device_list(row['電站代碼'], device_provider)
-                    # self._fill_device_info(wb, device_info)
+                    self._process_device_list(row['電站名稱'])
                     
-                    # Save workbook
                     output_filename = f"{row['電站代碼']}.xlsx"
                     wb.save(output_filename)
                     logging.info(f"Successfully processed station {row['電站代碼']}")
@@ -50,36 +37,23 @@ class PowerStationConverter:
             logging.error(f"Program execution error: {str(e)}")
     
     def _get_device_provider(self, provider: str):
-        """
-        Factory method to create appropriate device provider
-        """
-        # providers = {
-        #     'AUO': AUODeviceProvider(),
-        #     'XXX': XXXDeviceProvider()
-        # }
-        pass
-        # return providers.get(provider)
+        providers = {
+            'AUO': AUOPlantProvider(),
+            # 'XXX': XXXDeviceProvider()
+        }
+        return providers.get(provider)
     
-    def _process_device_list(self, station_code: str, provider):
-        """
-        Fetch device information from provider
-        """
-        pass
-        # return provider.fetch_device_info(station_code)
-    
-    def _fill_device_info(self, workbook, device_info):
-        """
-        Fill device information into the workbook
-        """
-        # Implementation for filling device info into worksheet
-        pass
+    def _process_device_list(self, plant_name: str):
+        plant = self.device_provider.fetch_plant(plant_name)
+        logging.info(plant)
+        
 
 def main():
     CSV_PATH = "template.csv"
     PROVIDER = "AUO"  # or "XXX" depending on your needs
     
-    converter = PowerStationConverter(os.getenv("GOOGLE_MAPS_API_KEY"))
-    converter.convert_csv_to_xlsx(CSV_PATH, PROVIDER)
+    converter = PowerStationConverter(PROVIDER)
+    converter.convert_csv_to_xlsx(CSV_PATH)
 
 if __name__ == "__main__":
     main()

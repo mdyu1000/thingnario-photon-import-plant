@@ -1,0 +1,149 @@
+{
+	"info": {
+		"_postman_id": "5558dcb3-daa7-43e7-b928-100baa12c11a",
+		"name": "友達",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38419057"
+	},
+	"item": [
+		{
+			"name": "登入 API",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"Act\":\"SERVICE@HWANTAISOLAR.COM\",\"Psw\":\"htcp83432172\",\"RememberMe\":true}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gms.auo.com/MvcWebPortal/Login/Login3",
+					"protocol": "https",
+					"host": [
+						"gms",
+						"auo",
+						"com"
+					],
+					"path": [
+						"MvcWebPortal",
+						"Login",
+						"Login3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1. plantList",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://gms.auo.com/MvcWebPortal/api/GetPlantsReduce?special_flag=Y",
+					"protocol": "https",
+					"host": [
+						"gms",
+						"auo",
+						"com"
+					],
+					"path": [
+						"MvcWebPortal",
+						"api",
+						"GetPlantsReduce"
+					],
+					"query": [
+						{
+							"key": "special_flag",
+							"value": "Y"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. plant",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://gms.auo.com/MvcWebPortal/api/getOnePlantInfo?plantNo=tWTevaz1Ot5qjfq5niMrCd7JT6LqMF8Y&format=json",
+					"protocol": "https",
+					"host": [
+						"gms",
+						"auo",
+						"com"
+					],
+					"path": [
+						"MvcWebPortal",
+						"api",
+						"getOnePlantInfo"
+					],
+					"query": [
+						{
+							"key": "plantNo",
+							"value": "tWTevaz1Ot5qjfq5niMrCd7JT6LqMF8Y"
+						},
+						{
+							"key": "format",
+							"value": "json"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. plantDeviceList",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://gms.auo.com/MvcWebPortal/api/GetDeviceTreeData?plant_no=tWTevaz1Ot5qjfq5niMrCd7JT6LqMF8Y&timeType=UTC&timeZoneOffSet=8&SW_Version_User=ADVANCED&lang=zh-TW&PlantType=BENQDL",
+					"protocol": "https",
+					"host": [
+						"gms",
+						"auo",
+						"com"
+					],
+					"path": [
+						"MvcWebPortal",
+						"api",
+						"GetDeviceTreeData"
+					],
+					"query": [
+						{
+							"key": "plant_no",
+							"value": "tWTevaz1Ot5qjfq5niMrCd7JT6LqMF8Y"
+						},
+						{
+							"key": "timeType",
+							"value": "UTC"
+						},
+						{
+							"key": "timeZoneOffSet",
+							"value": "8"
+						},
+						{
+							"key": "SW_Version_User",
+							"value": "ADVANCED"
+						},
+						{
+							"key": "lang",
+							"value": "zh-TW"
+						},
+						{
+							"key": "PlantType",
+							"value": "BENQDL"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

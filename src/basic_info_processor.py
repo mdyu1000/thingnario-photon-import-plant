@@ -2,10 +2,12 @@ import openpyxl
 from openpyxl.styles import PatternFill, Font, Alignment
 import requests
 import logging
+import os
+from src.constants import SheetNames
 
 class BasicInfoProcessor:
-    def __init__(self, api_key):
-        self.api_key = api_key
+    def __init__(self):
+        self.api_key = os.getenv("GOOGLE_MAPS_API_KEY")
 
     def create_base_template(self):
         """
@@ -13,7 +15,7 @@ class BasicInfoProcessor:
         """
         workbook = openpyxl.Workbook()
         sheet = workbook.active
-        sheet.title = "電站基本資訊 v8"
+        sheet.title = SheetNames.BASIC_INFO.value
 
         sheet.column_dimensions['A'].width = 20
         sheet.column_dimensions['B'].width = 40
@@ -68,7 +70,7 @@ class BasicInfoProcessor:
             ws["B7"] = lng
         
         # 設置固定值
-        ws["B9"] = "純光電"  # 電力結構
+        ws["B9"] = "純光電"
         ws["B10"] = csv_row["註冊碼"]
 
     def get_coordinates_from_google(self, address):

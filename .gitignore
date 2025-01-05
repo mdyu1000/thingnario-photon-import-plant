@@ -16,3 +16,6 @@ __pycache__/
 # 系統相關
 .DS_Store
 Thumbs.db
+
+# 日誌檔案
+logs/
