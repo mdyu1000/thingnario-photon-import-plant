@@ -133,14 +133,40 @@ class AUOPlantProvider(PlantProvider):
         if plant_info and "OnGridDate" in plant_info:
             grid_connection_date = plant_info["OnGridDate"].split("T")[0]  # Format: "2021-01-26T00:00:00" -> "2021-01-26"
 
-        # Parse devices
+        # 計數器字典
+        device_counters = {
+            'PYR': 0,  # 日照計
+            'THR': 0,  # 溫度計
+            'INV': 0   # 逆變器
+        }
+
         for device in device_data.get("lstDeviceTree", []):
+            power_collector_key = device.get('power_collector_key', '')
+
             if device['unit_type'] == 'MODULE_THERMAL':
-                thermometers.append(Device(device['description'], device['unit_id']))
+                device_counters['THR'] += 1
+                device_id = f"{power_collector_key}-THR-{device_counters['THR']:02d}"  # e.g. BDL22206042-THR-01
+                thermometers.append(Device(
+                    device_name=device['description'],
+                    device_serial_number=device['unit_id'],
+                    device_id=device_id
+                ))
             elif device['unit_type'] == 'INVERTER':
-                inverters.append(Device(device['description'], device['unit_id']))
+                device_counters['INV'] += 1
+                device_id = f"{power_collector_key}-INV-{device_counters['INV']:02d}"
+                inverters.append(Device(
+                    device_name=device['description'],
+                    device_serial_number=device['unit_id'],
+                    device_id=device_id
+                ))
             elif device['unit_type'] == 'RADIATION':
-                pyranometers.append(Device(device['description'], device['unit_id']))
+                device_counters['PYR'] += 1
+                device_id = f"{power_collector_key}-PYR-{device_counters['PYR']:02d}"
+                pyranometers.append(Device(
+                    device_name=device['description'],
+                    device_serial_number=device['unit_id'],
+                    device_id=device_id
+                ))
 
         return Plant(
             grid_connection_date=grid_connection_date,

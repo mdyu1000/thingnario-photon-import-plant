@@ -5,7 +5,8 @@ from dataclasses import dataclass
 @dataclass
 class Device:
     device_name: str
-    device_serial_no: str
+    device_serial_number: str # 裝置序號
+    device_id: str # 裝置代碼
 
 @dataclass
 class Plant:

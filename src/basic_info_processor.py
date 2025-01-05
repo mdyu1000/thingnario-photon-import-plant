@@ -4,7 +4,7 @@ from openpyxl.workbook.workbook import Workbook
 import requests
 import logging
 import os
-from src.constants import SheetNames
+from src.constants.constants import SheetNames
 
 class BasicInfoProcessor:
     def __init__(self):

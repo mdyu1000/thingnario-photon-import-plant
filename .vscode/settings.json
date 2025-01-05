@@ -3,6 +3,8 @@
         "dotenv",
         "iterrows",
         "levelname",
+        "Modbus",
+        "MPPT",
         "Pyranometer",
         "pyranometers",
         "sheetnames"
