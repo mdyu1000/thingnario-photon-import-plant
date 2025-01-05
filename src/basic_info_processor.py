@@ -1,5 +1,6 @@
-import openpyxl
-from openpyxl.styles import PatternFill, Font, Alignment
+from openpyxl.styles import PatternFill, Font
+from openpyxl.worksheet.worksheet import Worksheet
+from openpyxl.workbook.workbook import Workbook
 import requests
 import logging
 import os
@@ -9,13 +10,18 @@ class BasicInfoProcessor:
     def __init__(self):
         self.api_key = os.getenv("GOOGLE_MAPS_API_KEY")
 
-    def create_base_template(self):
+    def setup_basic_info_sheet(self, workbook: Workbook) -> Worksheet:
         """
-        創建基本模板，包含固定的表格結構和格式
+        設置基本資訊分頁的格式和結構
         """
-        workbook = openpyxl.Workbook()
-        sheet = workbook.active
-        sheet.title = SheetNames.BASIC_INFO.value
+        if SheetNames.BASIC_INFO.value in workbook.sheetnames:
+            sheet = workbook[SheetNames.BASIC_INFO.value]
+        else:
+            sheet = workbook.create_sheet(SheetNames.BASIC_INFO.value)
+
+        # 刪除默認的 Sheet
+        if "Sheet" in workbook.sheetnames:
+            del workbook["Sheet"]
 
         sheet.column_dimensions['A'].width = 20
         sheet.column_dimensions['B'].width = 40
@@ -48,30 +54,28 @@ class BasicInfoProcessor:
         for field, cell in info_fields:
             sheet[cell] = field
 
-        return workbook
+        return sheet
 
-    def fill_station_info(self, csv_row, workbook):
+    def fill_station_info(self, sheet: Worksheet, csv_row: dict):
         """
-        填充電站基本資訊
+        填充電站基本資訊到指定的工作表
         """
-        ws = workbook.active
-        
         # 填充動態資料
-        ws["B2"] = csv_row["地區"]
-        ws["B3"] = csv_row["電站代碼"]
-        ws["B4"] = csv_row["電站名稱"]
-        ws["B5"] = csv_row["地址"]
+        sheet["B2"] = csv_row["地區"]
+        sheet["B3"] = csv_row["電站代碼"]
+        sheet["B4"] = csv_row["電站名稱"]
+        sheet["B5"] = csv_row["地址"]
         
         # 處理經緯度
         full_address = f"{csv_row['地區']}{csv_row['CITY']}{csv_row['地址']}"
         lat, lng = self.get_coordinates_from_google(full_address)
         if lat and lng:
-            ws["B6"] = lat
-            ws["B7"] = lng
+            sheet["B6"] = lat
+            sheet["B7"] = lng
         
         # 設置固定值
-        ws["B9"] = "純光電"
-        ws["B10"] = csv_row["註冊碼"]
+        sheet["B9"] = "純光電"
+        sheet["B10"] = csv_row["註冊碼"]
 
     def get_coordinates_from_google(self, address):
         """

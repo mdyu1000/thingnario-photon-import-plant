@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from src.basic_info_processor import BasicInfoProcessor
 from src.auo_plant_provider import AUOPlantProvider
 from src.utils.logger import setup_logger
+from openpyxl.workbook.workbook import Workbook
+import openpyxl
 
 load_dotenv()
 setup_logger()
@@ -19,13 +21,12 @@ class PowerStationConverter:
             
             for _, row in df.iterrows():
                 try:
-                    wb = self.basic_info_processor.create_base_template()
-                    self.basic_info_processor.fill_station_info(row, wb)
-                    
+                    workbook = openpyxl.Workbook()
+                    self._process_basic_info(workbook, row)
                     self._process_device_list(row['電站名稱'])
-                    
+
                     output_filename = f"{row['電站代碼']}.xlsx"
-                    wb.save(output_filename)
+                    workbook.save(output_filename)
                     logging.info(f"Successfully processed station {row['電站代碼']}")
                 except Exception as e:
                     logging.error(f"Error processing station {row['電站代碼']}: {str(e)}")
@@ -43,6 +44,10 @@ class PowerStationConverter:
         }
         return providers.get(provider)
     
+    def _process_basic_info(self, workbook: Workbook, row: dict):
+        ws = self.basic_info_processor.setup_basic_info_sheet(workbook)
+        self.basic_info_processor.fill_station_info(ws, row)
+
     def _process_device_list(self, plant_name: str):
         plant = self.device_provider.fetch_plant(plant_name)
         logging.info(plant)

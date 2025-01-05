@@ -4,6 +4,7 @@
         "iterrows",
         "levelname",
         "Pyranometer",
-        "pyranometers"
+        "pyranometers",
+        "sheetnames"
     ]
 }
