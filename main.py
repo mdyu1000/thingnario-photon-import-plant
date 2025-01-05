@@ -13,7 +13,7 @@ setup_logger()
 class PowerStationConverter:
     def __init__(self, provider: str):
         self.basic_info_processor = BasicInfoProcessor()
-        self.device_provider = self._get_device_provider(provider)
+        self.plant_provider = self._get_plant_provider(provider)
     
     def convert_csv_to_xlsx(self, input_file: str):
         try:
@@ -37,7 +37,7 @@ class PowerStationConverter:
         except Exception as e:
             logging.error(f"Program execution error: {str(e)}")
     
-    def _get_device_provider(self, provider: str):
+    def _get_plant_provider(self, provider: str):
         providers = {
             'AUO': AUOPlantProvider(),
             # 'XXX': XXXDeviceProvider()
@@ -49,7 +49,7 @@ class PowerStationConverter:
         self.basic_info_processor.fill_station_info(ws, row)
 
     def _process_device_list(self, plant_name: str):
-        plant = self.device_provider.fetch_plant(plant_name)
+        plant = self.plant_provider.fetch_plant(plant_name)
         logging.info(plant)
         
 
